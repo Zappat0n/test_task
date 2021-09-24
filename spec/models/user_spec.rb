@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it 'Happy path' do
     expect(User.count).to eq 0
-    user = User.create(username: 'John', password: 'abcdefg')
+    User.create(username: 'John', password: 'abcdefg')
     expect(User.count).to eq 1
   end
 
