@@ -1,0 +1,12 @@
+<%= react_component('application-data', {
+  job_id: @job.id,
+  job_title: @job.title,
+  user_id: current_user.id,
+  username: current_user.username,
+  applications_data: @applications,
+  ratings: @ratings
+})%>
+
+<div id="root">
+  <%= javascript_pack_tag 'applications' %>
+</div>
