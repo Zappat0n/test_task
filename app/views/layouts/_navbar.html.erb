@@ -1,0 +1,10 @@
+<nav class="navbar navbar-light bg-primary justify-content-end text-white">
+  <strong class="text-white mx-3">
+    <% if logged_in? %>
+      <strong><%= link_to 'Log Out', logout_path, method: 'delete', class: "text-white" %></strong>
+      <%= current_user.username %>
+    <% else %>
+      <%= link_to 'Log in', login_path, class: "text-white" %>
+    <% end %>
+  </strong>
+</nav>
