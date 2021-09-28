@@ -10,7 +10,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
 
   const handleChange = (event) => setMessage(event.target.value);
 
-  const currentUserIncluded = () => applicationsData.filter((application) => userId == application.applicant_id).size > 0
+  const currentUserIncluded = () => applicationsData.filter((application) => userId == application.applicant_id).length > 0
 
   const sortRatings = (data) => {
     let sorted = [...data];
@@ -24,8 +24,9 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
   }
 
   const initializeRatings = () => {
-    let userIncluded = currentUserIncluded;
-    let userCount = ratingsData.length - (userIncluded ? 1 : 0);
+    console.log(applicationsData);
+    let userIncluded = currentUserIncluded();
+    let userCount = ratingsData.length - (userIncluded ? 0 : 1);
     let count = 0;
     let average = 0;
     let ratings = new Map();
@@ -37,15 +38,15 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
       }
     });
 
-    let averageRating = average / userCount;
-    let averageCount = count / userCount;
+    let averageRating = userCount != 0 ? average / userCount : 0;
+    let averageCount = userCount != 0 ? count / userCount : 0;
 
+    console.log(`rating: ${averageRating}, count: ${averageCount}, included: ${userIncluded}`)
     ratingsData.forEach(rating => {
       ratings.set(rating.user_id, (rating.avg * rating.count + averageRating * averageCount) / ( rating.count + averageCount));
     });
 
     applicationsData.forEach((application) => application.rating = ratings.get(application.applicant_id));
-    ratingsData.currentUserRating = ratings.get(userId);
     ratingsData.averageRating = averageRating;
     ratingsData.averageCount = averageCount;
     
@@ -63,8 +64,10 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
       rating: ratingsData.currentUserRating
     });
 
-    const newAverage = (ratingsData.averageRating * ratingsData.averageCount + ratingsData.currentUserRating) / (ratingsData.averageCount + 1);
-    const newCount = ratingsData.averageCount + 1;
+    const length = ratingsData.length;
+    const currentUserData = ratingsData.filter((rating) => userId == rating.user_id)[0];
+    const newAverage = (ratingsData.averageRating * (length-1) + currentUserData.avg) / length;
+    const newCount = (ratingsData.averageCount * (length-1) + currentUserData.count) / length;
 
     data.forEach((application) => {
       let rating = ratingsData.filter((rating) => rating.user_id == application.applicant_id)[0];
@@ -90,6 +93,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
         })
       });
       if (response.status === 200) updateRatings();
+      else if (response.status === 422) alertModal();
       setMessage('');
     } catch (error) {
       console.log(error);
