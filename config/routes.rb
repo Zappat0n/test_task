@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   root 'sessions#login'
-  resource :users
 
+  resource :users, only: [:new, :create]
   resources :jobs, only: [:index, :show]
-  resources :job_applications, only: [:create, :show]
+  resources :job_applications, only: [:create]
 
   get '/login', to: 'sessions#login'
   post '/login', to: 'sessions#create'
