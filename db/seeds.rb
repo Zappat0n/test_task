@@ -18,22 +18,27 @@ User.create(USERS) if User.count.zero?
 # Generate Ratings
 
 if Rating.count.zero?
-  User.all.each { |user| Rating.create(rating_value: rand(1..5), user: user) }
+  User.all.each do |user|
+    1.upto(rand(2..4)) do
+      Rating.create(rating_value: rand(1..5), user: user)
+    end
+  end
+
 end
 
 # Generate Jobs
 
 JOBS = [
-  { title: 'Baker'},
-  { title: 'Butcher'},
-  { title: 'Cook'},
-  { title: 'Farmer'},
-  { title: 'Fireman'},
-  { title: 'Gardener'},
-  { title: 'Hairdresser'},
-  { title: 'Journalist'},
-  { title: 'Lawyer'},
-  { title: 'Mason'}
+  { title: 'Paint house'},
+  { title: 'Remove floor'},
+  { title: 'Plant tree'},
+  { title: 'Change windows'},
+  { title: 'Fix problem in roof'},
+  { title: 'Fix toilet'},
+  { title: 'Install solar panels'},
+  { title: 'Install kitchen'},
+  { title: 'Demolish house'},
+  { title: 'Garden maintenance'}
 ].freeze
 
 Job.create(JOBS) if Job.count.zero?
