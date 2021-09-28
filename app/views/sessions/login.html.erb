@@ -1,10 +1,5 @@
 <div class="card w-25 mx-auto mt-5 shadow">
   <h2 class="card-header text-center">Log In</h2>
-  <% flash.each do |type, msg| %>
-    <div class="alert alert-danger text-center">
-      <%= msg %>
-    </div>
-  <% end %>
   <div class="card-body d-flex text-center">
     <%= form_tag '/login' do %>
       Username: <%= text_field_tag :username %><br>
