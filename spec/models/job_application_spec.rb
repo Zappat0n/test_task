@@ -30,5 +30,4 @@ RSpec.describe JobApplication, type: :model do
     ja = JobApplication.create(applicant_id: user.id, job: job, message: 'Make more bread')
     expect(ja.valid?).to be false
   end
-
 end
