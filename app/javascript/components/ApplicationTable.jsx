@@ -75,11 +75,6 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
   }
 
   const handleSubmit = async () => {
-    if (currentUserIncluded) {
-      setMessage('');
-      return;
-    }
-
     try {
       const token = document.querySelector('[name=csrf-token]').content
       const response = await fetch(`/job_applications`, {
@@ -94,10 +89,8 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
           message
         })
       });
-      if (response.status === 200) {
-        updateRatings();
-        setMessage('');
-      }
+      if (response.status === 200) updateRatings();
+      setMessage('');
     } catch (error) {
       console.log(error);
     }
