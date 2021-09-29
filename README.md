@@ -1,4 +1,4 @@
-# Ofri.ch Test Task for Junior Developers
+# Test Task for Junior Developers
 
 Build a Rails application with the following structure:
 * Create a User model with the following attributes:
