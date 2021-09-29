@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DisplayAlert, { ALERT} from './DisplayAlert';
+import ApplicationTableForm from './ApplicationTableForm';
 
 const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData, ratingsData }) => {
   const [applications, setApplications] = useState([]);
-  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => initializeRatings(), []);
-
-  const handleChange = (event) => setMessage(event.target.value);
 
   const currentUserIncluded = () => applicationsData.filter((application) => userId == application.applicant_id).length > 0
 
@@ -52,7 +50,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
     sortRatings(applicationsData);
   }
 
-  const updateRatings = () => {
+  const updateRatings = (message) => {
     let data = [...applications];
 
     data.push({
@@ -76,31 +74,9 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
     sortRatings(data);
   }
 
-  const handleSubmit = async () => {
-    try {
-      const token = document.querySelector('[name=csrf-token]').content
-      const response = await fetch(`/job_applications`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': token
-        },
-        body: JSON.stringify({
-          applicant_id: userId,
-          job_id: jobId,
-          message
-        })
-      });
-      if (response.status === 200) updateRatings();
-      else if (response.status === 422) {
-        setError('You have already applied for this job');
-        window.setInterval(() => setError(''), 2000);
-      };
-
-      setMessage('');
-    } catch (error) {
-      console.log(error);
-    }
+  const handleError = () => {
+    setError('You have already applied for this job');
+    window.setInterval(() => setError(''), 2000);
   }
 
   return (
@@ -130,13 +106,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
             : null ))
           }
         </ul>
-        <div className="card m-2">
-          <h5 className="p-1 text-center">Apply for job</h5>
-          <div className="d-flex w-100 justify-content-center pb-2">
-            <input type="text" value={message} onChange={handleChange} />
-            <button className="btn btn-primary mx-2" onClick={handleSubmit}>Apply</button>
-          </div>
-        </div>
+        <ApplicationTableForm userId={userId} jobId={jobId} onSucess={updateRatings} onError={handleError} />
       </div>
     </>
   );
