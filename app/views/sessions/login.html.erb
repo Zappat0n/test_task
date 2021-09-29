@@ -1,0 +1,10 @@
+<div class="card w-25 mx-auto mt-5 shadow">
+  <h2 class="card-header text-center">Log In</h2>
+  <div class="card-body d-flex text-center">
+    <%= form_tag '/login' do %>
+      Username: <%= text_field_tag :username %><br>
+      Password: <%= password_field_tag :password %><br>
+      <%= submit_tag "Log In", class: 'btn btn-primary mt-3' %>
+    <% end %>
+  </div>
+</div>
