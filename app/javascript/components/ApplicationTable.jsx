@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import DisplayAlert, { ALERT} from './DisplayAlert';
 
 const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData, ratingsData }) => {
   const [applications, setApplications] = useState([]);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => initializeRatings()
   , []);
@@ -24,7 +26,6 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
   }
 
   const initializeRatings = () => {
-    console.log(applicationsData);
     let userIncluded = currentUserIncluded();
     let userCount = ratingsData.length - (userIncluded ? 0 : 1);
     let count = 0;
@@ -93,7 +94,11 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
         })
       });
       if (response.status === 200) updateRatings();
-      else if (response.status === 422) alertModal();
+      else if (response.status === 422) {
+        setError('You have already applied for this job');
+        window.setInterval(() => setError(''), 2000);
+      };
+
       setMessage('');
     } catch (error) {
       console.log(error);
@@ -101,38 +106,41 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
   }
 
   return (
-    <div className="card w-50 mx-auto mt-5 shadow">
-      <h2 className="card-header text-center">{jobTitle}</h2>
-      <ul className="list-group w-100 text-center">
-        <div className="container-fluid">
-          <div className="row p-3">
-            <strong className="col">Message</strong>
-            <strong className="col">Username</strong>
-            <strong className="col">Rating</strong>
+    <>
+      <DisplayAlert type={ALERT} message={error} />
+      <div className="card w-50 mx-auto mt-5 shadow">
+        <h2 className="card-header text-center">{jobTitle}</h2>
+        <ul className="list-group w-100 text-center">
+          <div className="container-fluid">
+            <div className="row p-3">
+              <strong className="col">Message</strong>
+              <strong className="col">Username</strong>
+              <strong className="col">Rating</strong>
+            </div>
+          </div>
+          {applications.map((application, index) => (
+            application.rating ?
+            <li className="list-group-item" key={index}>
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col">{application.message}</div>
+                  <div className="col">{application.username}</div>
+                  <div className="col">{Math.round(application.rating*100)/100}</div>
+                </div>
+              </div>
+            </li>
+            : null ))
+          }
+        </ul>
+        <div className="card m-2">
+          <h5 className="p-1 text-center">Apply for job</h5>
+          <div className="d-flex w-100 justify-content-center pb-2">
+            <input type="text" value={message} onChange={handleChange} />
+            <button className="btn btn-primary mx-2" onClick={handleSubmit}>Apply</button>
           </div>
         </div>
-        {applications.map((application, index) => (
-          application.rating ?
-          <li className="list-group-item" key={index}>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col">{application.message}</div>
-                <div className="col">{application.username}</div>
-                <div className="col">{Math.round(application.rating*100)/100}</div>
-              </div>
-            </div>
-          </li>
-          : null ))
-        }
-      </ul>
-      <div className="card m-2">
-        <h5 className="p-1 text-center">Apply for job</h5>
-        <div className="d-flex w-100 justify-content-center pb-2">
-          <input type="text" value={message} onChange={handleChange} />
-          <button className="btn btn-primary mx-2" onClick={handleSubmit}>Apply</button>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 
