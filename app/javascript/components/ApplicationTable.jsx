@@ -7,8 +7,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => initializeRatings()
-  , []);
+  useEffect(() => initializeRatings(), []);
 
   const handleChange = (event) => setMessage(event.target.value);
 
@@ -42,10 +41,9 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
     let averageRating = userCount != 0 ? average / userCount : 0;
     let averageCount = userCount != 0 ? count / userCount : 0;
 
-    console.log(`rating: ${averageRating}, count: ${averageCount}, included: ${userIncluded}`)
-    ratingsData.forEach(rating => {
-      ratings.set(rating.user_id, (rating.avg * rating.count + averageRating * averageCount) / ( rating.count + averageCount));
-    });
+    ratingsData.forEach(rating => ratings.set(rating.user_id, 
+      (rating.avg * rating.count + averageRating * averageCount) / ( rating.count + averageCount))
+    );
 
     applicationsData.forEach((application) => application.rating = ratings.get(application.applicant_id));
     ratingsData.averageRating = averageRating;

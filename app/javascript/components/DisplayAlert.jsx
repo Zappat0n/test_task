@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 export const NOTICE = 0;
@@ -23,7 +23,7 @@ const DisplayAlert = ({type, message}) => {
 }
 
 DisplayAlert.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.number.isRequired,
   message: PropTypes.string.isRequired,
 }
 
