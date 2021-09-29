@@ -30,7 +30,7 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
     let ratings = new Map();
 
     ratingsData.forEach(rating => {
-      if (ratingsData.user_id != userId && userIncluded) {
+      if (rating.user_id != userId || userIncluded) {
         count += rating.count;
         average += parseFloat(rating.avg);  
       }
@@ -58,12 +58,11 @@ const ApplicationTable = ({ jobId, jobTitle, userId, userName, applicationsData,
       job_id: jobId,
       message,
       username: userName,
-      rating: ratingsData.currentUserRating
     });
 
     const length = ratingsData.length;
     const currentUserData = ratingsData.filter((rating) => userId == rating.user_id)[0];
-    const newAverage = (ratingsData.averageRating * (length-1) + currentUserData.avg) / length;
+    const newAverage = (ratingsData.averageRating * (length-1) + parseFloat(currentUserData.avg)) / length;
     const newCount = (ratingsData.averageCount * (length-1) + currentUserData.count) / length;
 
     data.forEach((application) => {
