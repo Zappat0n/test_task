@@ -44,5 +44,5 @@ by user rating (highest first)
 ## Configuration
 * Clone the project to your local computer
 * Run `bin/setup` to install the project locally
-* you can see in the file `db/seeds.rb` the available users.
+* The available users are in the file `db/seeds.rb`
 * Run `rails server` to run the server
