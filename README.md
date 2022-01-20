@@ -46,3 +46,5 @@ by user rating (highest first)
 * Run `bin/setup` to install the project locally
 * The available users are in the file `db/seeds.rb`
 * Run `rails server` to run the server
+
+## Blumen in den Balkonkasten für die Terrasse oder den Balkon pflanzen: Eine Anleitung
